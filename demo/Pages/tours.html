@@ -1,0 +1,263 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!--<meta charset="utf-8" />-->
+    <title>NTLX Company</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-clockpicker.min.css">
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://unpkg.com/uuid@latest/dist/umd/uuidv4.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap-clockpicker.min.js"></script>
+    <script src="../Scripts/ajaxCalls.js"></script>
+    <script src="../Scripts/dateTimeHelpers.js"></script>
+    <script src="../Scripts/discountTblActions.js"></script>
+    <script src="../Scripts/connectionPackages.js"></script>
+    <script src="../Scripts/tours.js"></script>
+    <link href="css/style.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container" id="mainContainer">
+        <div id="loadingTabs">
+            <div class="loader">Loading...</div>
+        </div>
+        <!--<div id="tabs" style="display: none;">
+            <button id="searchBookFlights" type="button" style="height: 30px;width: 170px">
+                Search and book flights
+            </button>
+            <span style="font-size: 20px;"><b>&nbsp||||&nbsp</b></span>
+            <button id="adminPanelBTN" type="button" style="height: 30px;width: 170px">
+                Admin Panel
+            </button>
+        </div>-->
+        <div id="mainFrame" class="container-fluid" style="display: none; margin-left: 10px; margin-bottom: 10px; margin-right: 10px;">
+            <div class="panel panel-default" id="mainFramePanel">
+                <div class="panel-heading">
+                    <h3 class="panel-title" id="mainFrameTitle">Main Frame Title</h3>
+                </div>
+                <div class="panel-body">
+                    <div id="adminLoginForm" style="display: none; margin: 15px;">
+                        <form id="loginForm">
+                            <div style="margin: 15px;">
+                                <label for="username"><b>Username:</b></label>
+                                <input id="username" type="text" placeholder="Enter Username" name="username" required>
+                                <label for="password"><b>Password:</b></label>
+                                <input id="password" type="password" placeholder="Enter Password" name="passsword" required>
+                                <br />
+                                <button id="submitLogin" class="orderBTN" type="submit">Login</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="registerCompanyForm" style="display: none; margin: 15px;">
+                        <form id="registerForm">
+                            <div style="margin: 15px;">
+                                <label for="companyUsername"><b>Company name:</b></label>
+                                <input id="companyUsername" type="text" placeholder="Enter Company Name" name="companyUsername" required>
+                                <label for="companyImage"><b>Company Image URL:</b></label>
+                                <input id="companyImage" type="text" placeholder="Enter Image URL" name="companyImage" required>
+                                <label for="companyPassword"><b>Password:</b></label>
+                                <input id="companyPassword" type="password" placeholder="Enter Password" name="companyPassword" required>
+                                <label for="companyAgree">
+                                    <input type="checkbox" checked="checked" name="companyAgree" id="companyAgree" required><b>&nbsp;&nbsp;Agree to terms and conditions of NTLX Vendor Company</b>
+                                </label>
+                                <br />
+                                <button id="submitCompanyRegister" class="orderBTN" type="submit">Register</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="adminPanel" style="display: none; margin: 15px;">
+                        <div id="orderInterface" class="container-fluid" style="display: none;">
+                            <div id="orderLoading">
+                                <div class="loader">Loading...</div>
+                            </div>
+                            <form id="orderEditForm" style="display: none;">
+                                <table id="orderTable" class="display nowrap" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Id</th>
+                                            <th>Price</th>
+                                            <th>Profit % per sale</th>
+                                            <th>City</th>
+                                            <th>Arrival Time</th>
+                                            <th>Departure Time</th>
+                                            <th>Date</th>
+                                            <th>Profit From Sales in €</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </form>
+                            <br />
+                            <div id="discountEditDiv" style="display: none;">
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <form id="discountForm">
+                                            <div class="form-group row" style="margin-left: 10px;">
+                                                <div class="form-group">
+                                                    <label for="discountPrice"><span class="red-star">★ </span>Price in €</label>
+                                                    <input type="text" class="form-control" id="discountPrice" placeholder="Enter the price as a number" required>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="discountProfitPerSale"><span class="red-star">★ </span>Profit % per sale (After saving you will get notified of the updated price in €)</label>
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           id="discountProfitPerSale"
+                                                           placeholder="Enter the Profit Rate"
+                                                           pattern="^((100)|(\d{1,2}(\.\d*)?))%$"
+                                                           oninvalid="this.setCustomValidity('Enter a number (<100) followed by %, for example: 25%')"
+                                                           oninput="this.setCustomValidity('')"
+                                                           required />
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="discountTo"><span class="red-star">★ </span>City</label>
+                                                    <input type="text" class="form-control" id="discountTo" placeholder="Enter the City" required>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="discountArrivalTime"><span class="red-star">★ </span>Arrival Time</label>
+                                                    <input type="text" class="form-control" id="discountArrivalTime" placeholder="Enter the Start Date" style="width: 15%" required />
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="discountDepartureTime"><span class="red-star">★ </span>Departure Time</label>
+                                                    <input type="text" class="form-control" id="discountDepartureTime" placeholder="Enter the End Date" style="width: 15%" required />
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="discountDate"><span class="red-star">★ </span>Date</label>
+                                                    <input type="text" class="form-control" id="discountDate" placeholder="Enter the Date" style="width: 15%" required />
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="discountSalesProfit"><span class="red-star">★ </span>Profit From Sales in €</label>
+                                                    <input type="text" class="form-control" id="discountSalesProfit" placeholder="Enter the Sales Profit" style="width: 15%" required />
+                                                </div>
+
+                                            </div>
+                                            <button type="submit" class="btn btn-primary btn-lg" id="discountSaveBTN">Save</button>
+                                            <input type="button" class="btn btn-warning btn-lg" id="discountCancelBTN" value="Cancel" />
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="discountInterface" class="container-fluid" style="display: none;">
+                            <span id="discountLoading">Loading...</span>
+                            <form id="discountEditForm" style="display: none;">
+                                <input type="button" value="New" class="discountNewBtn btn btn-primary btn-lg" data-clickedflag="no" />
+                                <table id="discountTable" class="display nowrap" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Id</th>
+                                            <th>Airline code</th>
+                                            <th>From</th>
+                                            <th>To</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                            <th>Discount</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                    <div id="flightBookForm" style="display: none; margin: 15px;">
+                        <form id="searchForm">
+                            <div class="panel panel-default" id="flightOrderPanel">
+                                <div class="panel-body" id="packageFormRow">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <fieldset>
+                                                <label class="fieldsetLabel" for="sources">Destination City:</label>
+                                                <input name="sources" list="sources" required />
+                                                <datalist id="sources"></datalist>
+                                            </fieldset>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <fieldset>
+                                                <br />
+                                                <label class="fieldsetLabel" for="departure">Date:</label>
+                                                <input type="date"
+                                                       id="startDATE"
+                                                       name="departure"
+                                                       min=""
+                                                       required />
+                                            </fieldset>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <fieldset>
+                                                <br />
+                                                <div class="input-group clockpicker">
+                                                    <fieldset>
+                                                        <input id="arrivalTime" name="arrivalTime" type="text" class="form-control" value="" placeholder="Arrival Time">
+                                                    </fieldset>
+                                                </div>
+                                                <br />
+                                                <div class="input-group clockpicker">
+                                                    <fieldset>
+                                                        <input id="departureTime" name="departureTime" type="text" class="form-control" value="" placeholder="Departure Time">
+                                                    </fieldset>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <fieldset>
+                                                <br />
+                                                <input class="btn btn-primary" type="submit" id="searchBTN" value="Search" />
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                        </form>
+                        <div id="tablePH">
+
+                        </div>
+                        <br />
+                        <div id="orderFrame" style="display: none;">
+                            <div id="orderFramePanel" class="panel panel-default">
+                                <div class="panel-body">
+                                    <form id="orderForm">
+                                        <label for="companyName"><i class="fa fa-user"></i> <b>Company Name:</b></label>
+                                        <input id="companyName" type="text" name="companyName" disabled>
+                                        <label for="profit"><i class="fa fa-envelope"></i> <b>Profit Rate:</b></label>
+                                        <input type="text"
+                                               id="profit"
+                                               name="profit"
+                                               placeholder="Enter the Profit Percentage You Are Expecting"
+                                               pattern="^((100)|(\d{1,2}(\.\d*)?))%$"
+                                               oninvalid="this.setCustomValidity('Enter a number (<100) followed by %, for example: 25%')"
+                                               oninput="this.setCustomValidity('')"
+                                               required />
+                                        <label for="agree">
+                                            <input type="checkbox" checked="checked" name="agree" id="agree" required>&nbsp&nbspAgree to terms and conditions of NTLX Package Vendor Company
+                                        </label>
+                                        <br />
+                                        <input type="submit" value="Place Order" id="submitOrder" class="orderBTN">
+                                        <br />
+                                        <input type="button" value="Cancel" id="cancelOrder" class="cancelOrderBTN">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
